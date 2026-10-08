@@ -175,7 +175,10 @@ std::vector<std::vector<int32_t>> Tokenizer::EncodeBatchRows(
     size_t count{};
     CheckResult(
         OrtxTokenId2DArrayGetItem(ids, index, &tokens, &count));
-    result.emplace_back(tokens, tokens + count);
+    if (count)
+      result.emplace_back(tokens, tokens + count);
+    else
+      result.emplace_back();
   }
   return result;
 }
