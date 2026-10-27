@@ -166,8 +166,9 @@ std::vector<std::vector<int32_t>> Tokenizer::EncodeBatchRows(
           "EncodeBatchRows: input string at index " +
           std::to_string(index) + " must not be null");
   OrtxPtr<OrtxTokenId2DArray> ids;
-  CheckResult(OrtxTokenize(tokenizer_, strings.data(), strings.size(),
-                           ids.Address()));
+  const auto tokenize = literal_ ? OrtxTokenizeLiteral : OrtxTokenize;
+  CheckResult(tokenize(tokenizer_, strings.data(), strings.size(),
+                       ids.Address()));
   std::vector<std::vector<int32_t>> result;
   result.reserve(strings.size());
   for (size_t index = 0; index < strings.size(); ++index) {
